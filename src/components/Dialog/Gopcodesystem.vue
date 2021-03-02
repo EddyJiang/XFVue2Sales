@@ -50,7 +50,7 @@
                 <el-button type="info" style="float: right; margin-right: 20px" @click="show = false" size="mini">关闭</el-button>
             </div>
         </el-dialog>
-    </div>
+    </div> 
 </template>
   
   

@@ -199,7 +199,7 @@ export default {
         },
 
         // 打开diolog
-        showdiolog() {
+        showdiolog() { 
             if (!this.disable) {
                 for (var item in this.searchform) {
                     this.searchform[item] = '';

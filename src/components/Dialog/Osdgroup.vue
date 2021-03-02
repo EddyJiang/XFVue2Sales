@@ -96,7 +96,7 @@ export default {
         entertrue: { type: Boolean, default: true },
         //是否禁用
         disable: { type: Boolean, default: false }
-    },
+    }, 
 
     // 创建完成
     created() {},

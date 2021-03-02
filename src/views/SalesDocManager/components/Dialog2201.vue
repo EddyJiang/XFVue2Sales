@@ -557,13 +557,13 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="合同号" prop="ContractNo">
+                                    <el-form-item label="合同号" prop="contractno">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <SaleContractHD
-                                            ref="ContractNo"
-                                            :modelname="HDData.ContractNo"
-                                            fieldname="ContractNo"
-                                            placeholder="请输入客编体系编号"
+                                            ref="contractno"
+                                            :modelname="HDData.contractno"
+                                            fieldname="contractno"
+                                            placeholder="请输入合同编号"
                                             :entertrue="false"
                                             @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
@@ -838,7 +838,7 @@ export default {
                 scraprate: '',
                 citt: '',
                 cittname: '',
-                ContractNo: '',
+                contractno: '',
 
                 AlPriceDate: '',
                 AlPrice: '',
@@ -968,12 +968,12 @@ export default {
                     this.HDData.citt = data.row.citt;
                     this.HDData.cittname = data.row.cittname;
                     break;
-                case 'ContractNo':
-                    this.$refs.ContractNo.str = row.doccode;
-                    this.HDData.ContractNo = row.doccode;
-                    this.$refs.settlemethodid.str = row.settlemethodid;
-                    this.HDData.settlemethodid = row.settlemethodid;
-                    this.HDData.settlemethodname = row.settlemethodname;
+                case 'contractno':
+                    this.$refs.contractno.str = data.row.doccode;
+                    this.HDData.contractno = data.row.doccode;
+                    this.$refs.settlemethodid.str = data.row.settlemethodid;
+                    this.HDData.settlemethodid = data.row.settlemethodid;
+                    this.HDData.settlemethodname = data.row.settlemethodname;
                     break;
             }
         },
@@ -1044,26 +1044,8 @@ export default {
                     this.HDData.citt = '';
                     this.HDData.cittname = '';
                     break;
-                case 'ContractNo':
-                    console.log(this.$refs.ContractNo);
-                    this.$refs.ContractNo.searchform.docBeginDate = this.$moment().subtract(3, 'y').format('YYYY-MM-DD');
-                    this.$refs.ContractNo.searchform.docEndDate = this.$moment().format('YYYY-MM-DD');
-                    this.$refs.ContractNo.$refs.companyId.str = '';
-                    this.$refs.ContractNo.$refs.companyId.searchform.companyid = '';
-                    this.$refs.ContractNo.$refs.companyId.searchform.companyname = '';
-                    this.$refs.ContractNo.searchform.companyId = '';
-                    this.$refs.ContractNo.$refs.cltcode.str = '';
-                    this.$refs.ContractNo.$refs.cltcode.searchform.cltcode = '';
-                    this.$refs.ContractNo.$refs.cltcode.searchform.cltname = '';
-                    this.$refs.ContractNo.$refs.cltcode.searchform.parentcltcode = '';
-                    this.$refs.ContractNo.searchform.cltcode = '';
-                    this.$refs.ContractNo.$refs.settleMethodId.str = '';
-                    this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodid = '';
-                    this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodname = '';
-                    this.$refs.ContractNo.searchform.settleMethodId = '';
-                    this.$refs.ContractNo.searchform.settleMethodName = '';
-                    this.$refs.ContractNo.searchform.isNew = false;
-                    this.$refs.ContractNo.searchform.isAll = false;
+                case 'contractno':
+                    this.HDData.contractno = '';
                     break;
             }
             console.log(fieldname);
