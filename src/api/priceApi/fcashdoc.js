@@ -14,8 +14,13 @@ const fcashdoc = {
     getDataOfByPage(index, size, sort, order, searchform) {
         return service.post(`${base.iPriceUrl}/fcashdoc/GetDataOfByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
     },
+    // 保存收款凭证数据
     saveData(data) {
         return service.post(`${base.iPriceUrl}/fcashdoc/SaveData`, data);
+    },
+    // 保存在途单数据
+    saveDataInTransit(data) {
+        return service.post(`${base.iPriceUrl}/fcashdoc/SaveDataInTransit`, data);
     },
     confirmDoc(doccode, username, docstatus) {
         return service.post(`${base.iPriceUrl}/fcashdoc/ConfirmDoc`, { doccode, username, docstatus });

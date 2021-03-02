@@ -571,40 +571,46 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="支付方式编号" prop="paymentCode">
-                                        <OSDGroup
-                                            ref="paymentCode"
-                                            :modelname="HDData.paymentCode"
+                                    <el-form-item label="支付方式编号" prop="paymentcode">
+                                        <GPayType
+                                            ref="paymentcode"
+                                            :modelname="HDData.paymentcode"
+                                            fieldname="paymentcode"
+                                            placeholder="请输入支付方式编号"
                                             :entertrue="false"
-                                            @inputEnterEvent="FollowCodeEnterEvent"
-                                            @cellDBLClickEvent="FollowCodeEnterEvent"
-                                            @importClickEvent="FollowCodeEnterEvent"
-                                            @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></OSDGroup>
+                                            @selectData="inputEnterEvent"
+                                            @inputChangeEvent="inputChangeEvent"
+                                        ></GPayType>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="支付方式名称" prop="PaymentName">
-                                        <el-input disabled v-model="HDData.PaymentName"></el-input>
+                                    <el-form-item label="支付方式名称" prop="paymentname">
+                                        <el-input disabled v-model="HDData.paymentname" placeholder="请输入支付方式名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭取价日" prop="AlPriceDate">
+                                    <el-form-item label="铝锭取价日" prop="alpricedate">
                                         <el-date-picker
-                                            :disabled="this.AlPriceDateDiabled"
-                                            v-model="HDData.AlPriceDate"
+                                            :disabled="this.alPriceDateDiabled"
+                                            v-model="HDData.alpricedate"
                                             style="width: 100%"
                                             type="date"
                                             value-format="yyyy-MM-dd"
+                                            placeholder="请选择铝锭取价日"
+                                            @change="calcAlPrice"
                                         ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭价" prop="AlPrice">
-                                        <el-input :disabled="this.AlPriceDiabled" v-model="HDData.AlPrice"></el-input>
+                                    <el-form-item label="铝锭价" prop="alprice">
+                                        <el-input
+                                            :disabled="this.alPriceDiabled"
+                                            v-model="HDData.alprice"
+                                            placeholder="计算得出铝锭价"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -617,64 +623,64 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="提货方式编号" prop="picktype">
-                                        <OSDGroup
+                                        <GDeliveryTerm
                                             ref="picktype"
                                             :modelname="HDData.picktype"
+                                            fieldname="picktype"
+                                            placeholder="请输入提货方式编号"
                                             :entertrue="false"
-                                            @inputEnterEvent="FollowCodeEnterEvent"
-                                            @cellDBLClickEvent="FollowCodeEnterEvent"
-                                            @importClickEvent="FollowCodeEnterEvent"
-                                            @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></OSDGroup>
+                                            @selectData="inputEnterEvent"
+                                            @inputChangeEvent="inputChangeEvent"
+                                        ></GDeliveryTerm>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="提货方式名称" prop="PicktypeName">
-                                        <el-input disabled v-model="HDData.PicktypeName"></el-input>
+                                    <el-form-item label="提货方式名称" prop="picktypename">
+                                        <el-input disabled v-model="HDData.picktypename" placeholder="请输入提货方式名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭来源编号" prop="ProcMethodId">
-                                        <OSDGroup
-                                            ref="ProcMethodId"
-                                            :modelname="HDData.ProcMethodId"
+                                    <el-form-item label="铝锭来源编号" prop="procmethodid">
+                                        <IMatSpec
+                                            ref="procmethodid"
+                                            :modelname="HDData.procmethodid"
+                                            fieldname="procmethodid"
+                                            placeholder="请输入铝锭来源编号"
                                             :entertrue="false"
-                                            @inputEnterEvent="FollowCodeEnterEvent"
-                                            @cellDBLClickEvent="FollowCodeEnterEvent"
-                                            @importClickEvent="FollowCodeEnterEvent"
-                                            @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></OSDGroup>
+                                            @selectData="inputEnterEvent"
+                                            @inputChangeEvent="inputChangeEvent"
+                                        ></IMatSpec>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭来源名称" prop="ProcMethodName">
-                                        <el-input disabled v-model="HDData.ProcMethodName"></el-input>
+                                    <el-form-item label="铝锭来源名称" prop="procmethodname">
+                                        <el-input disabled v-model="HDData.procmethodname" placeholder="请输入铝锭来源名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="税费类型编号" prop="VatType">
-                                        <Ocompany
-                                            ref="VatType"
-                                            :modelname="HDData.VatType"
+                                    <el-form-item label="税费类型编号" prop="vattype">
+                                        <GVatType
+                                            ref="vattype"
+                                            :modelname="HDData.vattype"
+                                            fieldname="vattype"
+                                            placeholder="请输入税费类型编号"
                                             :entertrue="false"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Ocompany>
+                                        ></GVatType>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="税费类型名称" prop="VatName">
-                                        <el-input disabled v-model="HDData.VatName"></el-input>
+                                    <el-form-item label="税费类型名称" prop="vatname">
+                                        <el-input disabled v-model="HDData.vatname" placeholder="请输入税费类型名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="税率" prop="vatrate">
-                                        <el-input v-model="HDData.vatrate"></el-input>
+                                        <el-input v-model="HDData.vatrate" placeholder="请输入税率"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -683,34 +689,40 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="省份" prop="a">
+                                    <el-form-item label="省份" prop="state">
                                         <el-select
                                             v-model="HDData.shipstate"
                                             filterable
                                             clearable
                                             placeholder="请选择省份"
                                             style="width: 100%"
+                                            @change="provinceChangeEvent"
                                         >
                                             <el-option
-                                                v-for="item in shipstateOptions"
+                                                v-for="item in shipStateOptions"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value"
-                                                :disabled="item.disabled"
                                             >
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="城市" prop="b">
-                                        <el-select v-model="HDData.b" filterable clearable placeholder="请选择城市" style="width: 100%">
+                                    <el-form-item label="城市" prop="city">
+                                        <el-select
+                                            v-model="HDData.shipcity"
+                                            filterable
+                                            clearable
+                                            placeholder="请选择城市"
+                                            style="width: 100%"
+                                            @change="cityChangeEvent"
+                                        >
                                             <el-option
-                                                v-for="item in docType2Options"
+                                                v-for="item in shipCityOptions"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value"
-                                                :disabled="item.disabled"
                                             >
                                             </el-option>
                                         </el-select>
@@ -721,12 +733,12 @@
                             <el-row :gutter="20">
                                 <el-col :span="12">
                                     <el-form-item label="地址1" prop="shipaddr1">
-                                        <el-input v-model="HDData.shipaddr1"></el-input>
+                                        <el-input v-model="HDData.shipaddr1" placeholder="请输入地址1"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="地址2" prop="shipaddr2">
-                                        <el-input v-model="HDData.shipaddr2"></el-input>
+                                        <el-input v-model="HDData.shipaddr2" placeholder="请输入地址2"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -736,12 +748,12 @@
                             <el-row :gutter="20">
                                 <el-col :span="12">
                                     <el-form-item label="生产备注" prop="usertxthd1">
-                                        <el-input v-model="HDData.usertxthd1"></el-input>
+                                        <el-input v-model="HDData.usertxthd1" placeholder="请输入生产备注"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="客户PO" prop="CustPOOrder">
-                                        <el-input v-model="HDData.CustPOOrder"></el-input>
+                                    <el-form-item label="客户PO" prop="custpoorder">
+                                        <el-input v-model="HDData.custpoorder" placeholder="请输入客户PO"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -749,12 +761,26 @@
                             <el-row :gutter="20">
                                 <el-col :span="12">
                                     <el-form-item label="开票备注" prop="usertxthd2">
-                                        <el-input v-model="HDData.usertxthd2"></el-input>
+                                        <el-input v-model="HDData.usertxthd2" placeholder="请输入开票备注"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="客户PO" prop="shipaddr2">
-                                        <el-input v-model="HDData.shipaddr2"></el-input>
+                                    <el-form-item label="运输包装方式" prop="tppackagetype">
+                                        <el-select
+                                            v-model="HDData.tppackagetype"
+                                            filterable
+                                            clearable
+                                            placeholder="请选择运输包装方式"
+                                            style="width: 100%"
+                                        >
+                                            <el-option
+                                                v-for="item in tpPackageTypeOptions"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                            >
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -773,10 +799,6 @@
 
 
 <script>
-import base from '@utils/base'; // 导入接口域名列表
-import axios from '@utils/request';
-import { isEmpty, isNull, now } from 'xe-utils/methods';
-
 export default {
     // 数据
     data() {
@@ -786,8 +808,8 @@ export default {
             // 通用数据
             commEntity: this.$api.identity.getCommEntity(),
             //组件disabled默认值
-            AlPriceDateDiabled: false,
-            AlPriceDiabled: false,
+            alPriceDateDiabled: false,
+            alPriceDiabled: false,
             btnCalcAlPriceDisabled: false,
             // 数据
             HDData: {
@@ -839,17 +861,37 @@ export default {
                 citt: '',
                 cittname: '',
                 contractno: '',
-
-                AlPriceDate: '',
-                AlPrice: '',
+                paymentcode: '',
+                paymentname: '',
+                alpricedate: '',
+                alprice: '',
+                picktype: '',
+                picktypename: '',
+                procmethodid: '',
+                procmethodname: '',
+                vattype: '',
+                vatname: '',
+                vatrate: '',
                 shipstate: '',
-
+                shipstatename: '',
+                shipcity: '',
+                shipcityname: '',
+                shipaddr1: '',
+                shipaddr2: '',
+                usertxthd1: '',
+                custpoorder: '',
+                usertxthd2: '',
+                tppackagetype: '0',
                 entername: JSON.parse(localStorage.eleUser || '[]').username,
                 enterdate: this.$moment().format('YYYY-MM-DD')
             },
+            // 销售类型下拉数组
             slsTypeOptions: [],
+            // 订单类型下拉数组
             docTypeOptions: [],
+            // 铝锭取价方式下拉数组
             alPriceMethodOptions: [],
+            // 订单类型2下拉数组
             docType2Options: [
                 {
                     value: '工程订单',
@@ -863,7 +905,13 @@ export default {
                     value: '集采订单',
                     label: '集采订单'
                 }
-            ]
+            ],
+            // 省份下拉数组
+            shipStateOptions: [],
+            // 城市下拉数组
+            shipCityOptions: [],
+            // 运输包装下拉数组
+            tpPackageTypeOptions: []
         };
     },
     // 父页面传递过来的参数
@@ -975,6 +1023,27 @@ export default {
                     this.HDData.settlemethodid = data.row.settlemethodid;
                     this.HDData.settlemethodname = data.row.settlemethodname;
                     break;
+                case 'paymentcode':
+                    this.$refs.paymentcode.str = data.row.paytypeid;
+                    this.HDData.paymentcode = data.row.paytypeid;
+                    this.HDData.paymentname = data.row.paytypename;
+                    break;
+                case 'picktype':
+                    this.$refs.picktype.str = data.row.deliveryid;
+                    this.HDData.picktype = data.row.deliveryid;
+                    this.HDData.picktypename = data.row.deliveryname;
+                    break;
+                case 'procmethodid':
+                    this.$refs.procmethodid.str = data.row.specno;
+                    this.HDData.procmethodid = data.row.specno;
+                    this.HDData.procmethodname = data.row.specname;
+                    break;
+                case 'vattype':
+                    this.$refs.vattype.str = data.row.vattype;
+                    this.HDData.vattype = data.row.vattype;
+                    this.HDData.vatname = data.row.vattypename;
+                    this.HDData.vatrate = data.row.vatrate;
+                    break;
             }
         },
 
@@ -1047,21 +1116,23 @@ export default {
                 case 'contractno':
                     this.HDData.contractno = '';
                     break;
+                case 'paymentcode':
+                    this.HDData.paymentcode = '';
+                    this.HDData.paymentname = '';
+                    break;
+                case 'picktype':
+                    this.HDData.picktype = '';
+                    this.HDData.picktypename = '';
+                    break;
+                case 'procmethodid':
+                    this.HDData.procmethodid = '';
+                    this.HDData.procmethodname = '';
+                    break;
+                case 'vattype':
+                    this.HDData.vattype = '';
+                    break;
             }
             console.log(fieldname);
-        },
-
-        // 选择跟单员事件
-        FollowCodeEnterEvent(row) {
-            this.$refs.FollowCode.str = row.sdgroup;
-            this.HDData.FollowCode = row.sdgroup;
-            this.HDData.FollowName = row.sdgroupname;
-        },
-
-        // 监听跟单员员事件
-        FollowCodeChangeEvent() {
-            this.searchform.FollowCode = '';
-            this.searchform.FollowName = '';
         },
 
         getOptionsData() {
@@ -1092,11 +1163,42 @@ export default {
             });
 
             //获取省份
-            axios.get(`${base.is}/oprovince/GetAll`).then((res) => {
-                for (var i in res.rows) {
-                    this.alPriceMethodOptions.push({ label: res.rows[i].dictvalue, value: res.rows[i].intervalue });
+            this.$api.oprovince.getAll().then((res) => {
+                for (var index in res.rows) {
+                    this.shipStateOptions.push({ label: res.rows[index].proivncename, value: res.rows[index].proivncecode });
                 }
             });
+
+            // citycode重复，取消初始化获取全部
+            // //获取城市
+            // this.$api.ocity.getAll().then((res) => {
+            //     console.log(res);
+            //     // for (var index in res.rows) {
+            //     //     this.shipCityOptions.push({
+            //     //         label: res.rows[index].cityname,
+            //     //         value: res.rows[index].citycode,
+            //     //         // proivncecode: res.rows[index].proivncecode
+            //     //     });
+            //     // }
+            // });
+
+            // 获取运输包装方式
+            this.$api.salesysdict.getDataByDictId('-18072301').then((res) => {
+                for (var index in res.rows) {
+                    this.tpPackageTypeOptions.push({ label: res.rows[index].dictvalue, value: res.rows[index].intervalue });
+                }
+            });
+
+            // 初始化数据
+            if (this.HDData.doctype == '国内订单') {
+                this.HDData.alpricemethod = '1';
+            } else {
+                this.HDData.alpricemethod = '2';
+            }
+            if (this.HDData.plistid == '') {
+                this.HDData.plistid = '001';
+                this.HDData.plistname = '国内灵通价';
+            }
         },
 
         save() {
@@ -1186,24 +1288,60 @@ export default {
             this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
         },
 
+        provinceChangeEvent(value) {
+            // 获取省份名称
+            for (var index in this.shipStateOptions) {
+                if (this.shipStateOptions[index].value == value) {
+                    this.HDData.shipstatename = this.shipStateOptions[index].label;
+                }
+            }
+
+            let province = value == null ? '' : value;
+            // 清空城市编号跟城市名称跟城市数组
+            this.HDData.shipcity = '';
+            this.HDData.shipcityname = '';
+            this.shipCityOptions = [];
+
+            if (province == '') {
+                return;
+            }
+            this.$api.ocity
+                .getDataByProvinceCode({ provincecode: province })
+                .then((res) => {
+                    for (var index in res.rows) {
+                        this.shipCityOptions.push({ label: res.rows[index].cityname, value: res.rows[index].citycode });
+                    }
+                })
+                .catch(() => {});
+        },
+
+        cityChangeEvent(value) {
+            // 获取城市名称
+            for (var index in this.shipCityOptions) {
+                if (this.shipCityOptions[index].value == value) {
+                    this.HDData.shipcityname = this.shipCityOptions[index].label;
+                }
+            }
+        },
+
         controlAlPrice(doctype, alpricemethod) {
             if (alpricemethod == '1') {
-                this.HDData.AlPriceDate = '';
-                this.AlPriceDateDiabled = true;
-                if (doctype == '32') this.AlPriceDiabled = false;
-                else this.AlPriceDiabled = true;
+                this.HDData.alpricedate = '';
+                this.alPriceDateDiabled = true;
+                if (doctype == '32') this.alPriceDiabled = false;
+                else this.alPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = true;
             } else if (alpricemethod == '2' || alpricemethod == '6') {
-                if (this.HDData.AlPriceDate == '') this.HDData.AlPriceDate = this.HDData.docdate;
-                this.AlPriceDateDiabled = false;
-                if (doctype == '32') this.AlPriceDiabled = false;
-                else this.AlPriceDiabled = true;
+                if (this.HDData.alpricedate == '') this.HDData.alpricedate = this.HDData.docdate;
+                this.alPriceDateDiabled = false;
+                if (doctype == '32') this.alPriceDiabled = false;
+                else this.alPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = false;
             } else {
-                this.HDData.AlPriceDate = '';
-                this.HDData.AlPrice = 0;
-                this.AlPriceDateDiabled = true;
-                this.AlPriceDiabled = true;
+                this.HDData.alpricedate = '';
+                this.HDData.alprice = 0;
+                this.alPriceDateDiabled = true;
+                this.alPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = false;
             }
         },
@@ -1231,21 +1369,26 @@ export default {
 
         calcAlPrice() {
             let alpricemethod = this.HDData.alpricemethod;
-            if (isEmpty(alpricemethod)) {
+            if (alpricemethod == '') {
                 this.$message.warning('请选择铝锭取价方式！');
                 return;
             }
 
             if (alpricemethod == '2') {
-                if (isEmpty(this.HDData.hdcurrency)) {
+                if (this.HDData.hdcurrency == '') {
                     this.$message.warning('请先输入币种信息！');
                     return;
                 }
                 this.$api.spricingmetaprice
-                    .getBilledPrice({ plistid: '', purdate: '', currency: '' })
+                    .getBilledPrice({ plistid: this.HDData.plistid, purdate: this.HDData.alpricedate, currency: this.HDData.hdcurrency })
                     .then((res) => {
+                        console.log(res);
                         if (res.total > 0) {
-                            // this.HDData.AlPrice = res.rows[0].avgvalue;
+                            this.HDData.alprice = res.rows[0].billedprice;
+                        } else {
+                            if (this.HDData.doctype != '') {
+                                this.$message.warning('没有找到相应的铝锭价，请联系采购部维护数据！');
+                            }
                         }
                     })
                     .catch(() => {});
@@ -1258,11 +1401,11 @@ export default {
                     }
                 });
                 // 定义一个铝锭取价日期
-                let alPriceDate = this.$moment(this.HDData.AlPriceDate);
+                let alPriceDate = this.$moment(this.HDData.alpricedate);
                 // 获取铝锭取价日期所在星期属于第几天
-                let asad = alPriceDate.weekday();
+                let weekday = alPriceDate.weekday();
                 // 获取铝锭取价日期所在星期的第一天
-                let begindate = alPriceDate.subtract(asad, 'days').format('YYYY-MM-DD');
+                let begindate = alPriceDate.subtract(weekday, 'days').format('YYYY-MM-DD');
                 // 获取铝锭取价日期所在星期最后一天，由于moment源数据会改变，直接+6就好
                 let enddate = alPriceDate.add(6, 'days').format('YYYY-MM-DD');
                 // 获取铝锭周平均价
@@ -1270,7 +1413,7 @@ export default {
                     .getBilledPriceAvg({ begindate, enddate, plistid: '001' })
                     .then((res) => {
                         if (res.total > 0) {
-                            this.HDData.AlPrice = res.rows[0].avgvalue;
+                            this.HDData.alprice = res.rows[0].avgvalue;
                         }
                     })
                     .catch(() => {});

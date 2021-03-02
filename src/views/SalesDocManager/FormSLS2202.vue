@@ -28,21 +28,19 @@
                                 <el-input disabled v-model="addFormData.doccode"></el-input>
                             </el-form-item>
                         </el-col>
-
                         <el-col :span="6">
                             <el-form-item label="单据类型" prop="doctype">
                                 <el-input disabled v-model="addFormData.doctype"></el-input>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="单据日期" prop="docdate">
                                 <el-date-picker
+                                    disabled
                                     v-model="addFormData.docdate"
-                                    class="entertrue"
                                     style="width: 100%"
                                     type="date"
+                                    value-format="yyyy-MM-dd"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -51,6 +49,9 @@
                                 <el-input disabled v-model="addFormData.docstatus"></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="申购人工号" prop="hrcode">
                                 <el-input disabled v-model="addFormData.hrcode"></el-input>
@@ -64,14 +65,8 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="公司代码" prop="companyid">
-                                <Ocompany
-                                    ref="ocompany"
-                                    :modelname="addFormData.companyid"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                ></Ocompany>
+                            <el-form-item label="公司编号" prop="companyid">
+                                <el-input disabled v-model="addFormData.companyid"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -79,16 +74,60 @@
                                 <el-input disabled v-model="addFormData.companyname"></el-input>
                             </el-form-item>
                         </el-col>
-
                         <el-col :span="6">
-                            <el-form-item label="客户代码" prop="cltcode">
+                            <el-form-item label="客户编号" prop="cltcode">
                                 <el-input disabled v-model="addFormData.cltcode"></el-input>
                             </el-form-item>
                         </el-col>
-
                         <el-col :span="6">
                             <el-form-item label="客户名称" prop="cltname">
                                 <el-input disabled v-model="addFormData.cltname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="提货仓库编号" prop="stcode">
+                                <el-input disabled v-model="addFormData.stcode"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="提货仓库名称" prop="stname">
+                                <el-input disabled v-model="addFormData.stname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="业务员编号" prop="sdgroup">
+                                <el-input disabled v-model="addFormData.sdgroup"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="业务员姓名" prop="sdgroupname">
+                                <el-input disabled v-model="addFormData.sdgroupname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="目的地省份" prop="stcode">
+                                <el-input disabled v-model="addFormData.stcode"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="目的地城市" prop="stname">
+                                <el-input disabled v-model="addFormData.stname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="目的地址1" prop="sdgroup">
+                                <el-input disabled v-model="addFormData.sdgroup"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="目的地址2" prop="sdgroupname">
+                                <el-input disabled v-model="addFormData.sdgroupname"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -229,7 +268,7 @@ export default {
                 },
                 {
                     field: 'matcode',
-                    title: '代码',
+                    title: '编号',
                     width: 100
                     // edit: { name: 'input' }
                 },
@@ -368,7 +407,7 @@ export default {
                 },
                 {
                     field: 'cv1',
-                    title: '颜色代码',
+                    title: '颜色编号',
                     width: 100,
                     edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
                     editrender: true
@@ -380,7 +419,7 @@ export default {
                 },
                 {
                     field: 'cv2',
-                    title: '材质代码',
+                    title: '材质编号',
                     width: 100,
                     edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
                     editrender: true
@@ -393,7 +432,7 @@ export default {
 
                 {
                     field: 'cv3',
-                    title: '膜厚代码',
+                    title: '膜厚编号',
                     width: 120
                 },
                 {

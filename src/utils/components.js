@@ -5,8 +5,12 @@ import CommTable from "@components/CommTable";
 import Departmental from "@components/Dialog/Departmental"; // 部门组件
 import DocStatusImg from "@components/DocStatusImg";
 import EditTable from "@components/EditTable";
+import GDeliveryTerm from "@components/Dialog/GDeliveryTerm"; // 提货方式列表组件
 import GOPCodeSystem from "@components/Dialog/GOPCodeSystem"; // 客户对照系统列表组件
+import GPayType from "@components/Dialog/GPayType"; // 支付方式列表组件
 import Gsettlemethod from "@components/Dialog/Gsettlemethod"; // 重量结算方式列表组件
+import GVatType from "@components/Dialog/GVatType"; // 税票类型列表组件
+import IMatSpec from "@components/Dialog/IMatSpec"; // 铝锭来源列表组件
 import OSDGroup from "@components/Dialog/OSDGroup"; // 业务员列表组件
 import PrcAccctCodeAccessList from "@components/Dialog/price/PrcAccctCodeAccessList"; // 结算--公司会计科目列表组件
 import PrcCashAccount from "@components/Dialog/price/PrcCashAccount"; // 结算--资金账户列表组件
@@ -27,8 +31,6 @@ import SLSCltProject from "@components/Dialog/SLSCltProject"; // 客户项目组
 import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
 // import Typedata from "@components/Dialog/Typedata";//机型
 // import Pvndgeneral from "@components/Dialog/Pvndgeneral"; // 供应商列表组件
-// import Gpaytype from "@components/Dialog/Gpaytype"; // 付款方式列表组件
-// import Gvattype from "@components/Dialog/Gvattype"; // 税票列表组件
 // import Picktype from "@components/Dialog/Picktype"; // 收货方式
 // import Reference from "@components/Dialog/Reference";//可收货的采购订单
 // import ReadBaoFeiMatcode from "@components/Dialog/ReadBaoFeiMatcode";//可报废模具信息
@@ -61,8 +63,12 @@ export default (Vue) => {
         Vue.component("Departmental", Departmental);
         Vue.component("DocStatusImg", DocStatusImg);
         Vue.component("EditTable", EditTable);
+        Vue.component("GDeliveryTerm", GDeliveryTerm);
         Vue.component("GOPCodeSystem", GOPCodeSystem);
+        Vue.component("GPayType", GPayType);
         Vue.component("Gsettlemethod", Gsettlemethod);
+        Vue.component("GVatType", GVatType);
+        Vue.component("IMatSpec", IMatSpec);
         Vue.component("OSDGroup", OSDGroup);
         Vue.component("PrcAccctCodeAccessList", PrcAccctCodeAccessList);
         Vue.component("PrcCashAccount", PrcCashAccount);
@@ -83,8 +89,6 @@ export default (Vue) => {
         Vue.component("Spricelist", Spricelist);
         // Vue.component("Typedata", Typedata),
         // Vue.component("Pvndgeneral", Pvndgeneral),
-        // Vue.component("Gpaytype", Gpaytype),
-        // Vue.component("Gvattype", Gvattype),
         // Vue.component("Currencyrate", Currencyrate),
         // Vue.component("Picktype", Picktype),                
         // Vue.component("Reference", Reference),

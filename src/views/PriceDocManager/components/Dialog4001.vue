@@ -425,7 +425,7 @@ export default {
 
         save() {
             this.$api.fcashdoc
-                .saveData(this.HDData)
+                .saveDataInTransit(this.HDData)
                 .then((res) => {
                     console.log(res);
                     if (res.code == 200) {
