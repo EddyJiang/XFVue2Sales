@@ -32,6 +32,7 @@ import salecontracthd from '../api/SalesApi/salecontracthd';
 import salestorage from '../api/SalesApi/salestorage';
 import salesysdict from '../api/SalesApi/salesysdict';
 import slscltproject from '../api/cmmApi/slscltproject';
+import slsitemtype from '../api/SalesApi/slsitemtype';
 import slssaledoctype from '../api/SalesApi/slssaledoctype';
 import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';
@@ -71,6 +72,7 @@ export default {
     salestorage,
     salesysdict,
     slscltproject,
+    slsitemtype,
     slssaledoctype,
     slssalesorderhd,
     slssalesorderitem,

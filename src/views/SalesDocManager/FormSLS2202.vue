@@ -53,16 +53,50 @@
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="申购人工号" prop="hrcode">
-                                <el-input disabled v-model="addFormData.hrcode"></el-input>
+                            <el-form-item label="损耗率" prop="scraprate">
+                                <el-input disabled v-model="addFormData.scraprate"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="申购人姓名" prop="hrname">
-                                <el-input disabled v-model="addFormData.hrname"></el-input>
+                            <el-form-item label="合同号" prop="contractno">
+                                <el-input disabled v-model="addFormData.contractno"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="制单公司" prop="usertxthd3">
+                                <el-input disabled v-model="addFormData.usertxthd3"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="销售类型" prop="slstype">
+                                <el-input disabled v-model="addFormData.slstype"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="提货交货" prop="deldate">
+                                <el-input disabled v-model="addFormData.deldate"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="计划交货" prop="planpickdate">
+                                <el-input disabled v-model="addFormData.planpickdate"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="铝锭价" prop="alprice">
+                                <el-input disabled v-model="addFormData.alprice"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <!-- <el-form-item label="" prop="hrname"> -->
+                            <el-checkbox v-model="autoCombin" label="重复项自动合并"></el-checkbox>
+                            <!-- </el-form-item> -->
+                        </el-col>
+                    </el-row>
+
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="公司编号" prop="companyid">
@@ -111,23 +145,23 @@
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="目的地省份" prop="stcode">
-                                <el-input disabled v-model="addFormData.stcode"></el-input>
+                            <el-form-item label="目的地省份" prop="shipstatename">
+                                <el-input disabled v-model="addFormData.shipstatename"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="目的地城市" prop="stname">
-                                <el-input disabled v-model="addFormData.stname"></el-input>
+                            <el-form-item label="目的地城市" prop="shipcityname">
+                                <el-input disabled v-model="addFormData.shipcityname"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="目的地址1" prop="sdgroup">
-                                <el-input disabled v-model="addFormData.sdgroup"></el-input>
+                            <el-form-item label="目的地址1" prop="shipaddr1">
+                                <el-input disabled v-model="addFormData.shipaddr1"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="目的地址2" prop="sdgroupname">
-                                <el-input disabled v-model="addFormData.sdgroupname"></el-input>
+                            <el-form-item label="目的地址2" prop="shipaddr2">
+                                <el-input disabled v-model="addFormData.shipaddr2"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -160,7 +194,8 @@
 
         <Dialog2003
             :dialog="commEntity.dialog"
-            :list="list"
+            :headerFormData="addFormData"
+            :hdData="rowdata"
             @Refresh="fetchTableData(addFormData.doccode)"
             v-if="commEntity.dialog.show"
         ></Dialog2003>
@@ -258,159 +293,26 @@ export default {
                     field: 'docitem',
                     title: '项次',
                     width: 100
-                    // edit: { name: 'input' }
                 },
                 {
                     field: 'stcode',
                     title: '仓库',
                     width: 100
-                    // edit: { name: 'input' }
                 },
                 {
                     field: 'matcode',
-                    title: '编号',
+                    title: '型材编号',
                     width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'docitem',
-                    title: '项次',
-                    width: 100
-                    // edit: { name: 'input' }
-                },
-                {
-                    field: 'matcode',
-                    title: '物料型号',
-                    width: 100,
-                    edit: { name: 'input' }
                 },
                 {
                     field: 'matname',
-                    title: '物料名称',
-                    width: 100,
-                    align: 'left',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'matgroup',
-                    title: '物料组',
-                    width: 80,
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'uom',
-                    title: '单位',
-                    width: 85,
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'digit',
-                    title: '订单支数',
-                    width: 100,
-                    edit: { name: 'input' }
+                    title: '型材名称',
+                    width: 100
                 },
                 {
                     field: 'cv1',
                     title: '颜色编号',
-                    width: 100,
-                    edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
-                    editrender: true
+                    width: 100
                 },
                 {
                     field: 'cv1name',
@@ -420,24 +322,297 @@ export default {
                 {
                     field: 'cv2',
                     title: '材质编号',
-                    width: 100,
-                    edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
-                    editrender: true
+                    width: 100
                 },
                 {
                     field: 'cv2name',
                     title: '材质名称',
                     width: 100
                 },
-
                 {
                     field: 'cv3',
                     title: '膜厚编号',
-                    width: 120
+                    width: 100
                 },
                 {
                     field: 'cv3name',
                     title: '膜厚名称',
+                    width: 100
+                },
+                {
+                    field: 'cv4',
+                    title: '长度',
+                    width: 100
+                },
+                {
+                    field: 'cv4varyyn',
+                    title: '长度可变',
+                    width: 100
+                },
+                {
+                    field: 'isptyn',
+                    title: '打胶',
+                    width: 100
+                },
+                {
+                    field: 'cv5',
+                    title: '公差编号',
+                    width: 100
+                },
+                {
+                    field: 'cv5name',
+                    title: '公差名称',
+                    width: 100
+                },
+                {
+                    field: 'cv8',
+                    title: '包装方式编号',
+                    width: 100
+                },
+                {
+                    field: 'cv8name',
+                    title: '包装方式名称',
+                    width: 100
+                },
+                {
+                    field: 'itemmemo',
+                    title: '明细备注',
+                    width: 100
+                },
+                {
+                    field: 'usrtxt1',
+                    title: '胶条类别',
+                    width: 100
+                },
+                {
+                    field: 'usrtxt6',
+                    title: '文本ID',
+                    width: 100
+                },
+                {
+                    field: 'digit',
+                    title: '支数订单',
+                    width: 100
+                },
+                {
+                    field: 'predigit',
+                    title: '支数原订购数',
+                    width: 100
+                },
+                {
+                    field: 'pickdigit',
+                    title: '支数出货',
+                    width: 100
+                },
+                {
+                    field: 'canceldigit',
+                    title: '支数取消',
+                    width: 100,
+                    align: 'left'
+                },
+                {
+                    field: 'opendigit',
+                    title: '支数欠数',
+                    width: 100
+                },
+                {
+                    field: 'sfcdigit',
+                    title: '支数已排产',
+                    width: 100
+                },
+                {
+                    field: 'min_digit',
+                    title: '最小提货量',
+                    width: 100
+                },
+                {
+                    field: 'max_digit',
+                    title: '最大提货量',
+                    width: 100
+                },
+                {
+                    field: 'discounttype',
+                    title: '折扣编号',
+                    width: 100
+                },
+                {
+                    field: 'discounttypename',
+                    title: '折扣名称',
+                    width: 100
+                },
+                {
+                    field: 'pricedigit',
+                    title: '重量计价数量',
+                    width: 100
+                },
+                {
+                    field: 'price',
+                    title: '重量单价',
+                    width: 100
+                },
+                {
+                    field: 'unitwght',
+                    title: '重量单重',
+                    width: 100
+                },
+                {
+                    field: 'theorywght',
+                    title: '重量理论重',
+                    width: 100
+                },
+                {
+                    field: 'totalmoney',
+                    title: '重量金额',
+                    width: 120
+                },
+                {
+                    field: 'otherprice',
+                    title: '面积单价',
+                    width: 100
+                },
+                {
+                    field: 'othermoney',
+                    title: '面积金额',
+                    width: 100
+                },
+                {
+                    field: 'unitarea',
+                    title: '面积单支',
+                    width: 100
+                },
+                {
+                    field: 'prdarea',
+                    title: '面积总面积',
+                    width: 100
+                },
+                {
+                    field: 'actunitsqm',
+                    title: '实方单价',
+                    width: 100
+                },
+                {
+                    field: 'actsqm',
+                    title: '实方实方',
+                    width: 100
+                },
+                {
+                    field: 'theorysqm',
+                    title: '实方理论方',
+                    width: 100
+                },
+                {
+                    field: 'totalmoney2',
+                    title: '总金额',
+                    width: 100
+                },
+                {
+                    field: 'wghtmethod',
+                    title: '结算编号',
+                    width: 100
+                },
+                {
+                    field: 'wghtmethodname',
+                    title: '结算名称',
+                    width: 100
+                },
+                {
+                    field: 'uom',
+                    title: '单位',
+                    width: 100
+                },
+                {
+                    field: 'pgroupcode',
+                    title: '型材价格组编号',
+                    width: 100
+                },
+                {
+                    field: 'pgroupname',
+                    title: '型材价格组名称',
+                    width: 100
+                },
+                {
+                    field: 'contractno',
+                    title: '合同号码',
+                    width: 100
+                },
+                {
+                    field: 'contractrowid',
+                    title: '合同标识',
+                    width: 100
+                },
+                {
+                    field: 'pvcitemcode',
+                    title: '胶条号',
+                    width: 100
+                },
+                {
+                    field: 'itemcode',
+                    title: '型材标识',
+                    width: 100
+                },
+                {
+                    field: 'scraprate',
+                    title: '客户接收损耗率（%）',
+                    width: 100
+                },
+                {
+                    field: 'cltmatcode',
+                    title: '客户型号',
+                    width: 100
+                },
+                {
+                    field: 'cltmatname',
+                    title: '客户型号名称',
+                    width: 100
+                },
+                {
+                    field: 'erpmatcode',
+                    title: '型材流水号',
+                    width: 100
+                },
+                {
+                    field: 'cltcv1',
+                    title: '客户颜色',
+                    width: 100
+                },
+                {
+                    field: 'cltcv1name',
+                    title: '客户颜色名称',
+                    width: 100
+                },
+                {
+                    field: 'labelmemo',
+                    title: '型号标签',
+                    width: 100
+                },
+                {
+                    field: 'custpono',
+                    title: '客户订单行号',
+                    width: 100
+                },
+                {
+                    field: 'qmcode',
+                    title: '质量编号',
+                    width: 100
+                },
+                {
+                    field: 'qmname',
+                    title: '质量名称',
+                    width: 100
+                },
+                {
+                    field: 'erpdfit',
+                    title: '子客户公司',
+                    width: 100
+                },
+                {
+                    field: 'erpcpvr',
+                    title: '子客户单号',
+                    width: 100
+                },
+                {
+                    field: 'alprice',
+                    title: '铝锭价',
                     width: 100
                 }
             ],
@@ -475,7 +650,9 @@ export default {
             ],
 
             // 是否启用按钮验证
-            ifdistools: ''
+            ifdistools: '',
+
+            autoCombin: ''
         };
     },
 
@@ -607,11 +784,21 @@ export default {
             this.rowdata = row.row;
         },
         addTableData() {
-            console.log(this.addFormData.doccode);
+            // console.log(this.addFormData.doccode);
+            // if (this.addFormData.doccode == null || this.addFormData.doccode == '') {
+            //     this.$message.warning('请生成单据 才能添加');
+            // } else {
+            //     this.$refs.table.insertEvent();
+            // }
             if (this.addFormData.doccode == null || this.addFormData.doccode == '') {
                 this.$message.warning('请生成单据 才能添加');
             } else {
-                this.$refs.table.insertEvent();
+                // this.$refs.table.insertEvent();
+                this.$nextTick(() => {
+                    this.commEntity.dialog.options = 'add';
+                    this.commEntity.dialog.title = '新增';
+                    this.commEntity.dialog.show = true;
+                });
             }
         },
         // 修改明细按钮
