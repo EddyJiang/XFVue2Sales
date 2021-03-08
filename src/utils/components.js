@@ -26,6 +26,7 @@ import SaleCltGeneral from "@components/Dialog/sale/SaleCltGeneral"; // 客户�
 import SaleCompany from "@components/Dialog/sale/SaleCompany"; // 公司列表组件
 import SaleContractHD from "@components/Dialog/sale/SaleContractHD"; // 合同组件
 import SaleCurrency from "@components/Dialog/sale/SaleCurrency"; // 币种列表组件
+import SaleMatGeneral from "@components/Dialog/sale/SaleMatGeneral"; // 型材型号列表组件
 import SaleStorage from "@components/Dialog/sale/SaleStorage"; // 仓库列表组件
 import SLSCltProject from "@components/Dialog/SLSCltProject"; // 客户项目组件
 import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
@@ -84,6 +85,7 @@ export default (Vue) => {
         Vue.component("SaleCompany", SaleCompany);
         Vue.component("SaleContractHD", SaleContractHD);
         Vue.component("SaleCurrency", SaleCurrency);
+        Vue.component("SaleMatGeneral", SaleMatGeneral);
         Vue.component("SaleStorage", SaleStorage);
         Vue.component("SLSCltProject", SLSCltProject);
         Vue.component("Spricelist", Spricelist);

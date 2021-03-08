@@ -790,15 +790,22 @@
             </template>
             <!-- 弹出层操作按钮 -->
             <div slot="footer" class="dialog-footer">
+                <el-button @click="editAlprice">铝锭价维护</el-button>
+                <el-button v-if="this.dialog.options == 'update'" @click="editAlprice">备注1刷新明细</el-button>
+                <el-button v-if="this.dialog.options == 'update'" @click="editAlprice">计划交货刷新明细</el-button>
                 <el-button @click="dialog.show = false">取 消</el-button>
                 <el-button type="primary" @click="save()">保 存</el-button>
             </div>
+            <Dialog2247 :dialog="commEntity.dialog" :hdData="HDData" v-if="commEntity.dialog.show"></Dialog2247>
         </el-dialog>
     </div>
 </template>
 
 
 <script>
+import { isEmpty } from 'xe-utils/methods';
+import Dialog2247 from './Dialog2247';
+
 export default {
     // 数据
     data() {
@@ -917,16 +924,23 @@ export default {
     // 父页面传递过来的参数
     props: {
         dialog: Object,
-        list: Object,
         hdData: Object
     },
     // 加载完成
     created() {
-        if (this.hdData != '' && this.hdData != null) {
-            this.HDData = this.hdData;
+        console.log(this.hdData);
+        if (this.hdData != '' && this.hdData != null && this.dialog.options == 'update') {
+            //复制源数据出来，再赋值，否则会修改列表源数据
+            const copyArray = JSON.parse(JSON.stringify(this.hdData));
+            this.HDData = copyArray;
         }
         this.getOptionsData();
         console.log(this.hdData);
+    },
+
+    // 引用组件
+    components: {
+        Dialog2247
     },
 
     // 操作方法
@@ -1242,24 +1256,24 @@ export default {
             this.$api.slssalesorderhd
                 .save(this.HDData)
                 .then((res) => {
-                    // if (res.status == 201) {
-                    //   // this.$message.success("保存成功");
-                    //  this.addFormData=res.data;
                     if (res != undefined) {
-                        this.HDData = res;
-                        alert('保存成功');
+                        // this.HDData = res;
+                        // alert('保存成功');
+                        // this.dialog.show = false;
+                        // this.$router.push({
+                        //     name: '11010',
+                        //     params: {
+                        //         formid: 11010,
+                        //         multipleSelection: res.data,
+                        //         type: 'fetch'
+                        //     }
+                        // });
+                        this.$message.success('保存成功');
                         this.dialog.show = false;
-                        this.$router.push({
-                            name: '11010',
-                            params: {
-                                formid: 11010,
-                                multipleSelection: res.data,
-                                type: 'fetch'
-                            }
-                        });
                     } else {
                         this.$alert(res.data.message);
                     }
+                    this.$emit('Refresh');
                 })
                 .catch(function (error) {
                     // this.$message.success('修改出错：'+error);
@@ -1418,6 +1432,18 @@ export default {
                     })
                     .catch(() => {});
             }
+        },
+
+        editAlprice() {
+            if (isEmpty(this.HDData.doccode)) {
+                this.$message.warning('单据未保存，请先保存单据！');
+                return;
+            }
+            if (isEmpty(this.HDData.hdcurrency)) {
+                this.$message.warning('请先输入币种信息！');
+                return;
+            }
+            this.commEntity.dialog.show = true;
         }
     }
 };

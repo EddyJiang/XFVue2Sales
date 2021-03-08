@@ -29,6 +29,7 @@ import salecltcompany from '../api/SalesApi/salecltcompany';
 import salecltgeneral from '../api/SalesApi/salecltgeneral';
 import salecompany from '../api/SalesApi/salecompany';
 import salecontracthd from '../api/SalesApi/salecontracthd';
+import salematgeneral from '../api/SalesApi/salematgeneral';
 import salestorage from '../api/SalesApi/salestorage';
 import salesysdict from '../api/SalesApi/salesysdict';
 import slscltproject from '../api/cmmApi/slscltproject';
@@ -69,6 +70,7 @@ export default {
     salecltgeneral,
     salecompany,
     salecontracthd,
+    salematgeneral,
     salestorage,
     salesysdict,
     slscltproject,

@@ -7,7 +7,7 @@
         <div class="container2">
             <!-- 工具栏 -->
             <el-row class="self-margin-down" :gutter="20">
-                <ActionTool @fetchTableData="fetchTableData" @addTableData="addTableData"></ActionTool>
+                <ActionTool @fetchTableData="fetchTableData" @aleTableData="aleTableData" @addTableData="addTableData"></ActionTool>
             </el-row>
 
             <template>
@@ -153,10 +153,11 @@
                 :options="commEntity.options"
                 :fetch="fetchTableData"
                 :pagination="commEntity.pagination"
+                @cellClickEvent="cellClickEvent"
                 @cellDBLClickEvent="cellDBLClickEvent"
             ></CommTable>
         </div>
-        <Dialog2201 :dialog="commEntity.dialog" v-if="commEntity.dialog.show" @Refresh="fetchTableData"></Dialog2201>
+        <Dialog2201 :dialog="commEntity.dialog" :hdData="rowdata" v-if="commEntity.dialog.show" @Refresh="fetchTableData"></Dialog2201>
     </div>
 </template>
 
@@ -300,6 +301,11 @@ export default {
                 });
         },
 
+        // 点击行事件
+        cellClickEvent(row) {
+            this.rowdata = row.row;
+        },
+
         // 表格双击事件
         cellDBLClickEvent(row) {
             this.$router.push({
@@ -318,6 +324,19 @@ export default {
             this.$nextTick(() => {
                 this.commEntity.dialog.options = 'add';
                 this.commEntity.dialog.title = '新增';
+                this.commEntity.dialog.show = true;
+            });
+        },
+
+        // 修改按钮事件
+        aleTableData() {
+            if (this.rowdata == null) {
+                this.$message.warning('请选中数据');
+                return;
+            }
+            this.$nextTick(() => {
+                this.commEntity.dialog.options = 'update';
+                this.commEntity.dialog.title = '修改';
                 this.commEntity.dialog.show = true;
             });
         },

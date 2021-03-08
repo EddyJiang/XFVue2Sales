@@ -194,7 +194,7 @@
 
         <Dialog2003
             :dialog="commEntity.dialog"
-            :headerFormData="addFormData"
+            :doccode="addFormData.doccode"
             :hdData="rowdata"
             @Refresh="fetchTableData(addFormData.doccode)"
             v-if="commEntity.dialog.show"

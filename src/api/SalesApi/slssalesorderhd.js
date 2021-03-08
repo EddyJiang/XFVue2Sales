@@ -15,9 +15,14 @@ const slssalesorderhd = {
 	},
 	//单条根据条件查询
 	getby(doccode) {
-		return axios.get(`${base.iSalesUrl}/sls_salesorderhd/GetSingle?doccode=` + doccode);
-
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetDataByDoccode`, { doccode });
 	},
+
+	//根据单据号获取订单表头跟明细信息
+	getDataOfDocAndItem(doccode) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetDataOfDocAndItem`, { doccode });
+	},
+
 	// 保存数据
 	updatedata(dataform) {
 		return axios.put(`${base.iSalesUrl}/sls_salesorderhd`, dataform);
