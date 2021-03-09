@@ -863,17 +863,29 @@ export default {
                 this.$message.warning('请选中数据');
                 return;
             } else {
-                this.$api.slssalesorderitem.delete(this.rowdata.doccode, this.rowdata.rowid).then((res) => {
-                    if (res.data.code == 200) {
-                        this.$message.success('删除成功');
-                        this.fetchTableData(this.rowdata.doccode);
-                        return;
-                    } else {
-                        this.$message.warning('删除失败：' + res.data.message);
-                        return;
-                        this.form.console.warn('hes');
-                    }
-                });
+                this.$confirm('是否删除当前记录？一旦删除，单据记录将无法进行恢复！', '单据记录删除')
+                    .then(() => {
+                        this.$api.slssalesorderitem
+                            .delete(this.rowdata.doccode, this.rowdata.rowid)
+                            .then((res) => {
+                                console.log(res);
+                                if (!isEmpty(res) && res.code == '200') {
+                                    alert('111');
+                                    this.$message.success('删除成功');
+                                    this.fetchTableData(this.rowdata.doccode);
+                                } else {
+                                    alert('222');
+                                    //     this.$message.warning('删除失败：' + res.data.message);
+                                    //     return;
+                                    //     this.form.console.warn('hes');
+                                }
+                            })
+                            .catch((error) => {
+                                this.$alert('保存出错：' + error);
+                                console.log(error);
+                            });
+                    })
+                    .catch(() => {});
             }
         },
 

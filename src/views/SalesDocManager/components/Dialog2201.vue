@@ -791,12 +791,18 @@
             <!-- 弹出层操作按钮 -->
             <div slot="footer" class="dialog-footer">
                 <el-button @click="editAlprice">铝锭价维护</el-button>
-                <el-button v-if="this.dialog.options == 'update'" @click="editAlprice">备注1刷新明细</el-button>
-                <el-button v-if="this.dialog.options == 'update'" @click="editAlprice">计划交货刷新明细</el-button>
+                <el-button v-if="this.dialog.options == 'update'" @click="savaMemo">备注1刷新明细</el-button>
+                <el-button v-if="this.dialog.options == 'update'" @click="saveDelDate">计划交货刷新明细</el-button>
                 <el-button @click="dialog.show = false">取 消</el-button>
                 <el-button type="primary" @click="save()">保 存</el-button>
             </div>
-            <Dialog2247 :dialog="commEntity.dialog" :hdData="HDData" v-if="commEntity.dialog.show"></Dialog2247>
+            <Dialog2247
+                :dialog="commEntity.dialog"
+                :hdData="HDData"
+                currentType="1"
+                @Refresh="Refresh"
+                v-if="commEntity.dialog.show"
+            ></Dialog2247>
         </el-dialog>
     </div>
 </template>
@@ -919,6 +925,14 @@ export default {
             shipCityOptions: [],
             // 运输包装下拉数组
             tpPackageTypeOptions: []
+
+            // 按订单铝锭价 1
+            // 按铝锭取价日定价 2
+            // 按合同固定价 3
+            // 按装车发货日定价 4
+            // 按本周平均价 6
+
+            // 国内订单 32
         };
     },
     // 父页面传递过来的参数
@@ -929,12 +943,18 @@ export default {
     // 加载完成
     created() {
         console.log(this.hdData);
+        this.getOptionsData();
+
         if (this.hdData != '' && this.hdData != null && this.dialog.options == 'update') {
             //复制源数据出来，再赋值，否则会修改列表源数据
             const copyArray = JSON.parse(JSON.stringify(this.hdData));
             this.HDData = copyArray;
+
+            this.docTypeChangeEvent(this.HDData.doctype);
+            this.alPriceMethodChangeEvent(this.HDData.alpricemethod);
+            this.provinceChangeEvent(this.HDData.shipstate);
+            this.cityChangeEvent(this.HDData.shipcity);
         }
-        this.getOptionsData();
         console.log(this.hdData);
     },
 
@@ -1203,15 +1223,17 @@ export default {
                 }
             });
 
-            // 初始化数据
-            if (this.HDData.doctype == '国内订单') {
-                this.HDData.alpricemethod = '1';
-            } else {
-                this.HDData.alpricemethod = '2';
-            }
-            if (this.HDData.plistid == '') {
-                this.HDData.plistid = '001';
-                this.HDData.plistname = '国内灵通价';
+            if (this.dialog.options == 'add') {
+                // 初始化数据
+                if (this.HDData.doctype == '国内订单') {
+                    this.HDData.alpricemethod = '1';
+                } else {
+                    this.HDData.alpricemethod = '2';
+                }
+                if (this.HDData.plistid == '') {
+                    this.HDData.plistid = '001';
+                    this.HDData.plistname = '国内灵通价';
+                }
             }
         },
 
@@ -1295,11 +1317,51 @@ export default {
                 this.HDData.alpricemethod = '1';
             }
 
-            this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
+            if (this.HDData.alpricemethod == '1') {
+                if (value == '32') {
+                    this.alPriceDiabled = false;
+                } else {
+                    this.alPriceDiabled = true;
+                }
+            } else if (this.HDData.alpricemethod == '2' || this.HDData.alpricemethod == '6') {
+                if (value == '32') {
+                    this.alPriceDiabled = false;
+                } else {
+                    this.alPriceDiabled = true;
+                }
+            } else {
+                this.alPriceDiabled = true;
+            }
         },
 
         alPriceMethodChangeEvent(value) {
-            this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
+            if (value == '1') {
+                this.alPriceDateDiabled = true;
+                this.HDData.alpricedate = '';
+                this.btnCalcAlPriceDisabled = true;
+                if (this.HDData.doctype == '32') {
+                    this.alPriceDiabled = false;
+                } else {
+                    this.alPriceDiabled = true;
+                }
+            } else if (value == '2' || value == '6') {
+                this.alPriceDateDiabled = false;
+                this.btnCalcAlPriceDisabled = false;
+                if (this.HDData.doctype == '32') {
+                    this.alPriceDiabled = false;
+                } else {
+                    this.alPriceDiabled = true;
+                }
+                if (this.$moment(this.HDData.alpricedate).isSameOrBefore('0001-01-01 00:00:00')) {
+                    this.HDData.alpricedate = this.HDData.docdate;
+                }
+            } else {
+                this.HDData.alpricedate = '';
+                this.HDData.alprice = 0;
+                this.btnCalcAlPriceDisabled = false;
+                this.alPriceDateDiabled = true;
+                this.alPriceDiabled = true;
+            }
         },
 
         provinceChangeEvent(value) {
@@ -1335,28 +1397,6 @@ export default {
                 if (this.shipCityOptions[index].value == value) {
                     this.HDData.shipcityname = this.shipCityOptions[index].label;
                 }
-            }
-        },
-
-        controlAlPrice(doctype, alpricemethod) {
-            if (alpricemethod == '1') {
-                this.HDData.alpricedate = '';
-                this.alPriceDateDiabled = true;
-                if (doctype == '32') this.alPriceDiabled = false;
-                else this.alPriceDiabled = true;
-                this.btnCalcAlPriceDisabled = true;
-            } else if (alpricemethod == '2' || alpricemethod == '6') {
-                if (this.HDData.alpricedate == '') this.HDData.alpricedate = this.HDData.docdate;
-                this.alPriceDateDiabled = false;
-                if (doctype == '32') this.alPriceDiabled = false;
-                else this.alPriceDiabled = true;
-                this.btnCalcAlPriceDisabled = false;
-            } else {
-                this.HDData.alpricedate = '';
-                this.HDData.alprice = 0;
-                this.alPriceDateDiabled = true;
-                this.alPriceDiabled = true;
-                this.btnCalcAlPriceDisabled = false;
             }
         },
 
@@ -1444,6 +1484,75 @@ export default {
                 return;
             }
             this.commEntity.dialog.show = true;
+        },
+
+        savaMemo() {
+            if (isEmpty(this.HDData.doccode)) {
+                this.$alert('单号为空，请检查！', '单号不能为空');
+                return;
+            }
+            this.$api.slssalesorderhd
+                .updateMemo(this.HDData)
+                .then((res) => {
+                    if (!isEmpty(res) && res.code == '200') {
+                        this.$message.success('保存成功');
+                    } else {
+                        this.$alert(res.message);
+                    }
+                })
+                .catch((error) => {
+                    this.$alert('保存出错：' + error);
+                    console.log(error);
+                });
+        },
+
+        saveDelDate() {
+            this.$confirm('确定要更新抬头计划交期到明细吗？', '询问')
+                .then(() => {
+                    let doclist = [];
+                    doclist.push(this.HDData.doccode);
+
+                    let othparms = {
+                        doctablenames: ['SLS_SalesOrderHD', 'SLS_SalesOrderItem', 'SLS_SalesOrderItem2'],
+                        usercode: JSON.parse(localStorage.eleUser || '[]').usercode,
+                        username: JSON.parse(localStorage.eleUser || '[]').username
+                    };
+                    // console.log(othparms);
+
+                    this.$api.slssalesorderhd
+                        .updateDelDate({ doclist, deldate: this.HDData.deldate, othparms })
+                        .then((res) => {
+                            // console.log(res);
+                            if (!isEmpty(res) && res.code == '200') {
+                                this.$message.success('保存成功');
+                            } else {
+                                this.$alert(res.message);
+                            }
+                        })
+                        .catch((error) => {
+                            this.$alert('保存出错：' + error);
+                            console.log(error);
+                        });
+                })
+                .catch(() => {});
+        },
+
+        Refresh() {
+            this.$api.slssalesorderhd
+                .getby(this.HDData.doccode)
+                .then((res) => {
+                    if (!isEmpty(res) && res.total > 0) {
+                        this.$refs.plistid.str = res.rows[0].plistid;
+                        this.HDData.plistid = res.rows[0].plistid;
+                        this.HDData.plistname = res.rows[0].plistname;
+                        if (!isEmpty(res.rows[0].alpricedate)) {
+                            this.HDData.alpricedate = res.rows[0].alpricedate;
+                        }
+                        this.HDData.alpricemethod = res.rows[0].alpricemethod;
+                        this.HDData.alprice = res.rows[0].alprice;
+                    }
+                })
+                .catch(() => {});
         }
     }
 };

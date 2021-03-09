@@ -64,6 +64,21 @@ const slssalesorderhd = {
 		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetCurrencyRate?page=` + page + '&rows=' + rows + '&sort=' + sort + '&order=' + order, searchform);
 	},
 
+	// 修改表头铝锭资料
+	updateAlPrice(dataform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/UpdateAlPrice`, dataform);
+	},
+
+	// 修改明细备注
+	updateMemo(dataform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/UpdateMemo`, dataform);
+	},
+
+	// 修改抬头及明细交期
+	updateDelDate(dataform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/UpdateDelDate`, dataform);
+	},
+
 	// 实体类
 	addFormData() {
 		return {

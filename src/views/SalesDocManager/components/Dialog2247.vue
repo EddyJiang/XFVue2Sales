@@ -67,7 +67,7 @@
                                     type="date"
                                     value-format="yyyy-MM-dd"
                                     placeholder="请选择铝锭取价日"
-                                    @change="calcAlPrice"
+                                    @change="alPriceDateChangeEvent"
                                 ></el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -183,12 +183,19 @@ export default {
 
             // 铝锭取价方式下拉数组
             alPriceMethodOptions: []
+
+            // 按订单铝锭价 1
+            // 按铝锭取价日定价 2
+            // 按合同固定价 3
+            // 按装车发货日定价 4
+            // 按本周平均价 6
         };
     },
     // 父页面传递过来的参数
     props: {
         dialog: Object,
-        hdData: Object
+        hdData: Object,
+        currentType: String
     },
     // 加载完成
     created() {
@@ -235,88 +242,80 @@ export default {
                     this.alPriceMethodOptions.push({ label: res.rows[index].dictvalue, value: res.rows[index].intervalue });
                 }
             });
-
-            // 初始化数据
-            if (this.HDData.doctype == '国内订单') {
-                this.HDData.alpricemethod = '1';
-            } else {
-                this.HDData.alpricemethod = '2';
-            }
-            if (this.HDData.plistid == '') {
-                this.HDData.plistid = '001';
-                this.HDData.plistname = '国内灵通价';
-            }
         },
 
         save() {
-            //   if (this.dialog.options == "add") {
-            //     // this.$api.mj_imatdochd.add(this.HDData).then(res => {
-            //     //   if (res.data.doccode != "" && res.data.doccode != null) {
-            //     //     this.$message.success("新增成功");
-            //     //     this.dialog.show = false;
-            //     //     this.$router.push({
-            //     //       name: "4032",
-            //     //       params: {
-            //     //         formid: 4032,
-            //     //         multipleSelection: res.data,
-            //     //         type: "fetch"
-            //     //       }
-            //     //     });
-            //     //   } else {
-            //     //     this.$message.warning(res.data.message);
-            //     //   }
-            //     // });
-
-            //   } else if (this.dialog.options == "updata") {
-            //     this.$api.mj_imatdochd.update(this.HDData).then(res => {
-            //       if ((res.code = 200)) {
-            //         this.$message.success("修改成功");
-            //         this.dialog.show = false;
-            //         this.$router.push({
-            //           name: "4032",
-            //           params: {
-            //             formid: 4032,
-            //             multipleSelection: res.data,
-            //             type: "fetch"
-            //           }
-            //         });
-            //       } else {
-            //         this.$message.warning("修改失败:" + res.message);
-            //       }
-            //     });
-            //   }
-            // }
+            if (isEmpty(this.HDData.plistid) || isEmpty(this.HDData.plistname)) {
+                this.$message.warning('请输入正确的价目表！');
+                return;
+            }
+            if (isEmpty(this.HDData.alpricemethod)) {
+                this.$message.warning('请选择正确的铝锭取价方式！');
+                return;
+            }
+            if (
+                this.HDData.alpricemethod == '2' &&
+                (isEmpty(this.HDData.alpricedate) || this.$moment(this.HDData.alpricedate).isSame('0001-01-01 00:00:00'))
+            ) {
+                this.$message.warning('请输入铝锭取价日期！');
+                return;
+            }
+            if (Number(this.HDData.alprice) <= 0) {
+                this.$message.warning('请输入正确的铝锭价！');
+                return;
+            }
             this.$api.slssalesorderhd
-                .save(this.HDData)
+                .updateAlPrice(this.HDData)
                 .then((res) => {
-                    if (res != undefined) {
-                        // this.HDData = res;
-                        // alert('保存成功');
-                        // this.dialog.show = false;
-                        // this.$router.push({
-                        //     name: '11010',
-                        //     params: {
-                        //         formid: 11010,
-                        //         multipleSelection: res.data,
-                        //         type: 'fetch'
-                        //     }
-                        // });
+                    if (!isEmpty(res) && res.code == '200') {
                         this.$message.success('保存成功');
                         this.dialog.show = false;
                     } else {
-                        this.$alert(res.data.message);
+                        this.$alert(res.message);
                     }
                     this.$emit('Refresh');
                 })
-                .catch(function (error) {
-                    // this.$message.success('修改出错：'+error);
-                    alert('保存出错：' + error);
+                .catch((error) => {
+                    this.$alert('保存出错：' + error);
                     console.log(error);
                 });
         },
 
         alPriceMethodChangeEvent(value) {
-            this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
+            if (value == '1') {
+                if (this.currentType == '1') {
+                    this.alPriceDateDiabled = false;
+                    this.alPriceDiabled = false;
+                    this.HDData.alpricedate = this.HDData.docdate;
+                } else if (this.currentType == '2') {
+                    this.alPriceDateDiabled = true;
+                    this.alPriceDiabled = false;
+                    this.HDData.alpricedate = '';
+                }
+            } else if (value == '2' || value == '6') {
+                this.alPriceDateDiabled = false;
+                this.alPriceDiabled = false;
+                if (this.$moment(this.HDData.alpricedate).isSameOrBefore('0001-01-01 00:00:00')) {
+                    this.HDData.alpricedate = this.HDData.docdate;
+                }
+            } else {
+                this.HDData.alpricedate = '';
+                this.HDData.alprice = 0;
+                this.alPriceDateDiabled = true;
+                this.alPriceDiabled = true;
+            }
+        },
+
+        alPriceDateChangeEvent(value) {
+            // console.log(value);
+            if (
+                this.$moment(this.HDData.alpricedate).isSame('0001-01-01 00:00:00') ||
+                this.$moment(this.HDData.alpricedate).isSame('1980-01-01 00:00:00')
+            ) {
+                this.HDData.alpricedate = '';
+            } else {
+                this.calcAlPrice();
+            }
         },
 
         calcAlPrice() {
@@ -334,13 +333,11 @@ export default {
                 this.$api.spricingmetaprice
                     .getBilledPrice({ plistid: this.HDData.plistid, purdate: this.HDData.alpricedate, currency: this.HDData.hdcurrency })
                     .then((res) => {
-                        console.log(res);
+                        // console.log(res);
                         if (res.total > 0) {
                             this.HDData.alprice = res.rows[0].billedprice;
                         } else {
-                            if (this.HDData.doctype != '') {
-                                this.$message.warning('没有找到相应的铝锭价，请联系采购部维护数据！');
-                            }
+                            this.$message.warning('没有找到相应的铝锭价，请联系采购部维护数据！');
                         }
                     })
                     .catch(() => {});
@@ -362,7 +359,7 @@ export default {
                 let enddate = alPriceDate.add(6, 'days').format('YYYY-MM-DD');
                 // 获取铝锭周平均价
                 this.$api.spricingmetaprice
-                    .getBilledPriceAvg({ begindate, enddate, plistid: '001' })
+                    .getBilledPriceAvg({ begindate, enddate, plistid: this.HDData.plistid })
                     .then((res) => {
                         if (res.total > 0) {
                             this.HDData.alprice = res.rows[0].avgvalue;
