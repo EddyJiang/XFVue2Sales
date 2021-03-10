@@ -49,9 +49,15 @@ const slssalesorderhd = {
 	conifrmdoc(doccode, type, usercode, memo) {
 		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/conifrmdoc?doccode=` + doccode + '&type=' + type + '&usercode=' + usercode + '&memo=' + memo);
 	},
+
 	//审核/反审核采购申请单
 	examinedoc(doccode, usercode, nextdocstatus, memo, dcflag) {
 		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/examinedoc?doccode=` + doccode + '&usercode=' + usercode + '&nextdocstatus=' + nextdocstatus + '&memo=' + memo + '&dcflag=' + dcflag);
+	},
+
+	// 作废订单
+	scrapdoc(doccode,modifyname,modifydate) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/ScrapDoc`, { doccode, modifyname, modifydate });
 	},
 
 	// 获取订单类型2

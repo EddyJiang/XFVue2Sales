@@ -25,6 +25,12 @@ const slssalesorderitem = {
 	delete(doccode, rowid) {
 		return axios.delete(`${base.iSalesUrl}/sls_salesorderitem/deldata?doccode=` + doccode + '&rowid=' + rowid);
 	},
+
+	// 重算粉油
+	itemRebuild(dataform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderitem/ItemRebuild`, dataform);
+	},
+
 	//修改实体类
 	FormData() {
 		return {

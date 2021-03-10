@@ -16,7 +16,18 @@
                     @delTableData="delTableData"
                     @exportFrom="exportFrom"
                     @savTableData="savTableData"
+                    @freeTableData="freeTableData"
+                    @Headerchange="Headerchange"
                 ></ActionTool>
+            </el-row>
+
+            <el-row>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="itemRebuild">重算粉油</el-button>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="itemMemo">备注修改</el-button>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="1">重算粉油</el-button>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="1">重算粉油</el-button>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="1">重算粉油</el-button>
+                <el-button style="margin-right: 10px" size="mini" icon="el-icon-edit" @click="1">重算粉油</el-button>
             </el-row>
 
             <!-- 表头信息 -->
@@ -192,6 +203,13 @@
             ></EditTable>
         </div>
 
+        <Dialog2201
+            :dialog="docDialog.dialog"
+            :hdData="addFormData"
+            @Refresh="refreshHeader(addFormData.doccode)"
+            v-if="docDialog.dialog.show"
+        ></Dialog2201>
+
         <Dialog2003
             :dialog="commEntity.dialog"
             :doccode="addFormData.doccode"
@@ -199,11 +217,16 @@
             @Refresh="fetchTableData(addFormData.doccode)"
             v-if="commEntity.dialog.show"
         ></Dialog2003>
+
+        <Dialog2207 :dialog="memoDialog.dialog" :hdData="rowdata" v-if="memoDialog.dialog.show"></Dialog2207>
     </div>
 </template>
 
 <script>
+import Dialog2201 from '@views/SalesDocManager/components/Dialog2201';
 import Dialog2003 from '@views/SalesDocManager/components/Dialog2003';
+import Dialog2207 from '@views/SalesDocManager/components/Dialog2207';
+import { isEmpty, isNull } from 'xe-utils/methods';
 
 export default {
     // 数据
@@ -211,6 +234,12 @@ export default {
         return {
             // 通用数据
             commEntity: this.$api.identity.getCommEntity(),
+
+            // 表头表单
+            docDialog: this.$api.identity.getCommEntity(),
+
+            // 备注表单
+            memoDialog: this.$api.identity.getCommEntity(),
 
             rowdata: null,
 
@@ -695,7 +724,9 @@ export default {
     },
     // 引用组件
     components: {
-        Dialog2003
+        Dialog2201,
+        Dialog2003,
+        Dialog2207
     },
     // 操作方法
     methods: {
@@ -824,12 +855,12 @@ export default {
                 this.$api.slssalesorderitem
                     .update(row.row)
                     .then((res) => {
-                        if (res.data.code == 200) {
+                        if (res.code == 200) {
                             this.$message.success('修改成功');
                             this.fetchTableData(row.row.doccode);
                             return;
                         } else {
-                            this.$message.warning('修改失败：' + res.data.message);
+                            this.$message.warning('修改失败：' + res.message);
                             this.fetchTableData(row.row.doccode);
                             return;
                             this.form.console.warn('hes');
@@ -870,12 +901,10 @@ export default {
                             .then((res) => {
                                 console.log(res);
                                 if (!isEmpty(res) && res.code == '200') {
-                                    alert('111');
                                     this.$message.success('删除成功');
                                     this.fetchTableData(this.rowdata.doccode);
                                 } else {
-                                    alert('222');
-                                    //     this.$message.warning('删除失败：' + res.data.message);
+                                    //     this.$message.warning('删除失败：' + res.message);
                                     //     return;
                                     //     this.form.console.warn('hes');
                                 }
@@ -892,7 +921,7 @@ export default {
         // 确认按钮
         okTableData() {
             this.$api.slssalesorderhd.conifrmdoc(this.addFormData.doccode, 1, this.addFormData.hrcode, '').then((res) => {
-                if (res.data.code == 200) {
+                if (res.code == 200) {
                     this.$message.success('确认成功');
                     this.ifdistools = 'true';
                     this.operationstate = true;
@@ -900,9 +929,7 @@ export default {
                     return;
                 } else {
                     this.$alert(
-                        '确认失败:' + JSON.parse(res.data.message)[0].Memo == null
-                            ? res.data.message
-                            : JSON.parse(res.data.message)[0].Memo,
+                        '确认失败:' + JSON.parse(res.message)[0].Memo == null ? res.message : JSON.parse(res.message)[0].Memo,
                         '错误提示',
                         {
                             confirmButtonText: '确定',
@@ -919,15 +946,15 @@ export default {
         // 取消按钮
         cancelTableData() {
             if (this.addFormData.docstatus == 50) {
-                this.$api.slssalesorderhd.conifrmdoc(this.addFormData.doccode, -1, this.addFormData.hrcode, '').then((res) => {
-                    if (res.data.code == 200) {
+                this.$api.slssalesorderhd.examinedoc(this.addFormData.doccode, this.addFormData.hrcode, '', '', '').then((res) => {
+                    if (res.code == 200) {
                         this.$message.success('取消确认成功');
                         this.ifdistools = 'false';
                         this.operationstate = false;
                         this.addFormData.docstatus = 0;
                         return;
                     } else {
-                        this.$alert('取消确认失败:' + res.data.message, '错误提示', {
+                        this.$alert('取消确认失败:' + res.message, '错误提示', {
                             confirmButtonText: '确定',
                             callback: (action) => {}
                         });
@@ -949,12 +976,12 @@ export default {
                 .then((res) => {
                     // if (res.status == 201) {
                     //   // this.$message.success("保存成功");
-                    //  this.addFormData=res.data;
+                    //  this.addFormData=res;
                     if (res != undefined) {
                         this.addFormData = res;
                         alert('保存成功');
                     } else {
-                        this.$alert(res.data.message);
+                        this.$alert(res.message);
                     }
                 })
                 .catch(function (error) {
@@ -963,6 +990,80 @@ export default {
                     console.log(error);
                 });
         },
+
+        freeTableData() {
+            this.$api.slssalesorderhd
+                .getby(this.addFormData.doccode)
+                .then((res) => {
+                    if (isEmpty(res) || res.total < 1 || res.rows[0].docstatus != 0) {
+                        this.$message.warning('单据状态不正确，不允许作废！');
+                        return;
+                    }
+                    this.$api.slssalesorderhd
+                        .scrapdoc()
+                        .then((res) => {
+                            // console.log(res);
+                            if (!isEmpty(res)) {
+                                if (res.code == 200) {
+                                    this.addFormData.blscrap = 1;
+                                    this.ifdistools = '';
+                                    this.$message.success('单据作废成功！');
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            alert(error);
+                        });
+                })
+                .catch(() => {});
+        },
+
+        Headerchange() {
+            this.$nextTick(() => {
+                this.docDialog.dialog.options = 'update';
+                this.docDialog.dialog.title = '修改';
+                this.docDialog.dialog.show = true;
+            });
+        },
+
+        // 重算粉油
+        itemRebuild() {
+            if (isEmpty(this.addFormData.doccode)) {
+                this.$message.warning('单号不能为空！');
+                return;
+            }
+            this.$api.slssalesorderitem
+                .itemRebuild({ doccode: this.addFormData.doccode })
+                .then((res) => {
+                    if (!isEmpty(res) && res.code == 200) {
+                        this.$message.success('重算成功！');
+                    } else {
+                        this.$message.error('重算失败，请联系管理员！');
+                    }
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        },
+
+        // 备注修改
+        itemMemo() {
+            if (isNull(this.rowdata)) {
+                this.$message.warning('请选中数据');
+                return;
+            }
+            let rowid = this.rowdata.rowid;
+            let itemcode = this.rowdata.itemcode;
+            let doccode = this.addFormData.doccode;
+            if (!isEmpty(doccode) && !isEmpty(rowid)) {
+                this.$nextTick(() => {
+                    this.memoDialog.dialog.options = 'update';
+                    this.memoDialog.dialog.title = '修改';
+                    this.memoDialog.dialog.show = true;
+                });
+            }
+        },
+
         //机型弹窗 获取数据
         cv1_edit(row, nul) {
             if (nul.isTrusted == true) {
